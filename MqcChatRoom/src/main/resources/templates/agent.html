@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head th:insert="fragments/head :: head"></head>
+<head>
+    <title>index</title>
+
+</head>
+
+<!--<body id="page-top">-->
+<body>
+
+<div id="app" class="container-fluid">
+    <modal v-if="showModal" @close="showModal = false">
+        <iframe id="iframe" ref="iframe" border="none" width="100%" height="100%" slot="body"></iframe>
+    </modal>
+
+    <template>
+        <div class="row" v-for="(items, index) in agentData" :class="items.length ==5 ? ' d-flex justify-content-around':'d-flex justify-content-center'">
+            <div style="cursor:pointer" class="col-md-2 col-sm-2 card mb-3 border" name="card" @click.stop="openDialog" v-for="(item, index) in items" :extension="item.extension" :class="item.id != null ? '' : 'invisible'">
+                <div class="row g-0">
+                    <div class="col-md-4 d-flex justify-content-center align-items-center">
+                        <h1 class="card-title"><i class="fa-solid fa-user-ninja display-3"></i></h1>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <p class="card-text">
+                                帳號:{{ item.account }}
+                            </p>
+                            <p class="card-text">
+                                分機:{{ item.extension }}
+                            </p>
+                            <p class="card-text">
+                                名稱:{{ item.userName }}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </template>
+
+
+</div>
+
+</body>
+<script>
+    var userInfoPath =  "[[@{/userInfo}]]"
+</script>
+<script th:src="@{/js/agent.js}"></script>
+
+<script></script>
+
+</html>

@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.mqc</groupId>
+        <artifactId>parent-project</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>MqcChatRoom</artifactId>
+    <packaging>war</packaging>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-thymeleaf</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>nz.net.ultraq.thymeleaf</groupId>
+            <artifactId>thymeleaf-layout-dialect</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-websocket</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-messaging</artifactId>
+        </dependency>
+
+
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <scope>runtime</scope>
+            <optional>true</optional>
+        </dependency>
+
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.5</version>
+        </dependency>
+
+
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.6</version>
+        </dependency>
+
+
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>4.5.9</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.microsoft.sqlserver</groupId>
+            <artifactId>mssql-jdbc</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+
+        <dependency>
+
+            <groupId>com.mqc</groupId>
+            <artifactId>MqcSDK</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.jnetpcap</groupId>
+            <artifactId>jnetpcap</artifactId>
+            <systemPath>${jnetpcap.sdk.systemPath}</systemPath>
+            <version>1.4</version>
+            <scope>system</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.pachira</groupId>
+            <artifactId>vcgclient</artifactId>
+            <systemPath>${vcg.sdk.systemPath}</systemPath>
+            <version>1.0</version>
+            <scope>system</scope>
+        </dependency>
+
+
+
+    </dependencies>
+    <build>
+
+        <finalName>mqc</finalName>
+
+
+        <plugins>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <configuration>
+                    <webResources>
+                        <resource>
+                            <directory>${project.basedir}\..\lib\</directory>
+                            <targetPath>WEB-INF\lib</targetPath>
+                            <includes>
+                                <include>VCGClient-1.0.jar</include>
+                            </includes>
+                        </resource>
+
+                        <resource>
+                            <directory>${project.basedir}\..\lib\jnetpcap\linux-1.4</directory>
+                            <targetPath>WEB-INF\lib</targetPath>
+                            <includes>
+                                <include>jnetpcap.jar</include>
+                            </includes>
+                        </resource>
+
+                    </webResources>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.tomcat.maven</groupId>
+                <artifactId>tomcat7-maven-plugin</artifactId>
+                <version>2.2</version>
+                <configuration>
+                    <url>http://10.12.0.38:8080/manager/text</url>
+                    <server>TomcatServer</server>
+                    <path>/mqc</path>
+                    <username>tomcat</username>
+                    <password>tomcat</password>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+
+                <configuration>
+                    <includeSystemScope>false</includeSystemScope>
+                    <excludeGroupIds>org.apache.tomcat.embed</excludeGroupIds>
+                    <layers>
+                        <enabled>false</enabled>
+                    </layers>
+
+                </configuration>
+
+            </plugin>
+        </plugins>
+    </build>
+</project>

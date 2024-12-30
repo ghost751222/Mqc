@@ -1,0 +1,17 @@
+mvn archetype:generate -DgroupId=com.mqc -DartifactId=parent-project
+
+
+cd parent-project
+mvn archetype:generate -DgroupId=com.baeldung -DartifactId=core
+mvn archetype:generate -DgroupId=com.baeldung -DartifactId=service
+mvn archetype:generate -DgroupId=com.baeldung -DartifactId=webapp
+
+
+
+
+mvn archetype:generate -DgroupId=com.baeldung -DartifactId=parent-project
+
+cd parent-project
+mvn archetype:generate -DgroupId=com.baeldung -DartifactId=core
+mvn archetype:generate -DgroupId=com.baeldung -DartifactId=service
+mvn archetype:generate -DgroupId=com.baeldung -DartifactId=webapp

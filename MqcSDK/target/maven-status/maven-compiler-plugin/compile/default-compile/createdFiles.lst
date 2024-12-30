@@ -1,0 +1,8 @@
+com\macaron\mqcsdk\PartyInfo.class
+com\macaron\mqcsdk\LocalDateTimeUtils.class
+com\macaron\mqcsdk\RtpInform.class
+com\macaron\mqcsdk\RtpReceiveListener.class
+com\macaron\mqcsdk\QcClerk$RtpAddressParty.class
+com\macaron\mqcsdk\QcClerk.class
+com\macaron\mqcsdk\QcClerk$1.class
+com\macaron\mqcsdk\VoiceDetect.class

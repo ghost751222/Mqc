@@ -1,0 +1,79 @@
+<ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar" th:fragment="sidebar">
+
+
+    <a class="sidebar-brand d-flex align-items-center justify-content-center" th:href="@{/home}">
+        <div class="sidebar-brand-icon rotate-n-15">
+            <i class="fas fa-laugh-wink"></i>
+        </div>
+        <div class="sidebar-brand-text mx-3"></div>
+    </a>
+
+    <hr class="sidebar-divider">
+    <li class="nav-item" th:if="${session.isAdmin}">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#sysManager" aria-expanded="true"
+           aria-controls="collapseTwo">
+            <i class="fas fa-fw fa-cog"></i>
+            <span>系統管理</span>
+        </a>
+        <div id="sysManager" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header"></h6>
+                <a class="collapse-item" th:href="@{/userInfo}" target="iframeMain">用戶管理</a>
+            </div>
+        </div>
+    </li>
+
+    <hr class="sidebar-divider">
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#psaeManager" aria-expanded="true"
+           aria-controls="collapseTwo">
+            <i class="fas fa-fw fa-cog"></i>
+            <span>對話紀錄管理</span>
+        </a>
+        <div id="psaeManager" class="collapse" aria-labelledby="headingTwo" data-parent="#psaeManager">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header"></h6>
+                <a class="collapse-item" th:href="@{/agent}" target="iframeMain">即時對話</a>
+                <a class="collapse-item" th:href="@{/chatRecordMaster}" target="iframeMain">歷史紀錄</a>
+
+            </div>
+        </div>
+
+
+
+    </li>
+
+<!--    <hr class="sidebar-divider">-->
+<!--    <li class="nav-item">-->
+<!--        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#pqaManager" aria-expanded="true"-->
+<!--           aria-controls="collapseTwo">-->
+<!--            <i class="fas fa-fw fa-cog"></i>-->
+<!--            <span>語音質檢管理</span>-->
+<!--        </a>-->
+<!--        <div id="pqaManager" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">-->
+<!--            <div class="bg-white py-2 collapse-inner rounded">-->
+<!--                <h6 class="collapse-header"></h6>-->
+<!--                <a class="collapse-item" th:href="@{/pqa}" target="iframeMain">語音質檢查詢</a>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </li>-->
+
+    <div class="text-center d-none d-md-inline">
+        <button class="rounded-circle border-0" id="sidebarToggle"></button>
+    </div>
+    <script type="text/javascript">
+        $("a[target='iframeMain']").click(function(e){
+            if($("#accordionSidebar").attr('class').includes("toggled")){
+                $(e.target).parent().parent().parent().toggleClass('show')
+            }
+        })
+        $(document).ready(function(){
+           $("[name='iframeMain'")[0].onload = function(e){
+
+             if(this.contentWindow.location.href.indexOf('login') > -1){
+                 location.reload()
+              }
+           }
+        })
+    </script>
+</ul>

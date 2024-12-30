@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head th:insert="fragments/head :: head"></head>
+<head>
+    <title>User</title>
+</head>
+<body>
+
+<div id="app" class="container-fluid">
+    <modal v-if="showModal" @close="showModal = false">
+        <form slot="body" class="form" @submit.prevent="save">
+
+            <div class="form-group">
+                <label for="id">ID</label>
+                <input type="text" class="form-control" id="id" required v-model="userInfo.id" disabled/>
+            </div>
+
+            <div class="form-group">
+                <label for="account">帳號</label>
+                <input type="text" class="form-control" id="account" required
+                       v-model="userInfo.account" placeholder="Enter Account"/>
+
+            </div>
+
+            <div class="form-group">
+                <label for="name">顯示名稱</label>
+                <input type="text" class="form-control" id="name" placeholder="Enter Name" required
+                       v-model="userInfo.userName"/>
+            </div>
+
+            <div class="form-group">
+                <label for="extension">分機</label>
+                <input type="text" class="form-control" id="extension" placeholder="Enter Extension"
+                       v-model="userInfo.extension"/>
+            </div>
+
+            <div class="form-group">
+                <label for="isAdmin">管理者</label>
+                <select class="form-control" id="isAdmin" required v-model="userInfo.isAdmin">
+                    <option value="0">否</option>
+                    <option value="1">是</option>
+                </select>
+            </div>
+
+            <div class="text-right">
+                <button class="btn btn-primary">ok</button>
+                <input type="button" class="btn btn-primary" @click="showModal = false" value="close"/>
+            </div>
+
+
+        </form>
+    </modal>
+    <div class="form-row">
+        <div class="form-group col-md-2">
+            <label for="account">Account</label>
+            <input type="text" id="account" class="form-control" v-model="query_account"/>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-2">
+            <label>&nbsp;</label>
+            <button class="btn-primary form-control" @click="query">Query</button>
+        </div>
+
+        <div class="form-group col-md-2">
+            <label>&nbsp;</label>
+            <button class="btn-primary form-control" @click="add">Add</button>
+        </div>
+
+    </div>
+    <div class="pagination ui basic segment grid">
+        <vuetable-pagination-info ref="paginationInfo"></vuetable-pagination-info>
+        <vuetable-pagination
+                ref="pagination" @vuetable-pagination:change-page="onChangePage"></vuetable-pagination>
+    </div>
+    <vuetable ref="vuetable" :api-url="url" :load-on-start="false" :fields="fields" :per-page="perPage"
+              :append-params="appendParams" :transform="transformData" @vuetable:load-success="loadSuccess"
+              :query-params="{  page: 'pageIndex',perPage:'pageSize',sort:'sort'}" :reactive-api-url="false"
+              track-by="id" data-path="data" pagination-path="pagination" :sort-order="sortOrder"
+              @vuetable:pagination-data="onPaginationData">
+        <div slot="actions" slot-scope="props">
+            <button @click="onActionClicked('edit',props.rowData)" title="edit" class="btn btn-primary">
+                <i class="fa-solid fa-pen-to-square"></i>
+            </button>
+
+            <button @click="onActionClicked('delete',props.rowData)" title="delete" class="btn btn-primary">
+                <i class="fa-solid fa-trash"></i>
+            </button>
+
+            <button @click="onActionClicked('password',props.rowData)" title="password" class="btn btn-primary">
+                <i class="fa-solid fa-lock"></i>
+            </button>
+        </div>
+    </vuetable>
+</div>
+
+</body>
+<script>
+    var requestPath =  "[[@{/userInfo}]]"
+</script>
+<script th:src="@{/js/userInfo.js}"></script>
+
+
+</html>

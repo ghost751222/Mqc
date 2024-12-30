@@ -1,0 +1,7 @@
+java -Djava.library.path=D:/Consiliuminc/IntelljWorkspace/Mqc/lib/jnetpcap/win  -jar demo-1.0-SNAPSHOT.jar
+
+
+java -Djava.library.path=/root/mqc/  -jar demo-1.0-SNAPSHOT.jar
+
+
+java -Dspring.config.location=./target/ -Djava.library.path=D:\\Consiliuminc\\IntelljWorkspace\\Mqc\\lib\\jnetpcap\\ori -jar ./target/demo-1.0-SNAPSHOT.jar

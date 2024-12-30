@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head th:insert="fragments/head :: head"></head>
+<head>
+    <title>index</title>
+</head>
+
+<!--<body id="page-top">-->
+<body>
+
+<div id="app" class="container-fluid">
+    <modal v-if="showModal" @close="showModal = false">
+        <iframe id="iframe" ref="iframe" border="none" width="100%" height="100%" slot="body"></iframe>
+    </modal>
+
+        <div class="form-row">
+            <div class="form-group col-md-2">
+                <label for="startDateTime">StartTime</label>
+                <input type="date" id="startDateTime" class="form-control" v-model="startDateTime"/>
+            </div>
+            <div class="form-group col-md-2">
+                <label for="endDateTime">EndTime</label>
+                <input type="date" id="endDateTime" class="form-control" v-model="endDateTime"/>
+            </div>
+        </div>
+
+    <div class="form-row">
+        <div class="form-group col-md-2">
+            <label for="Agent">Agent Extension</label>
+            <input type="text" id="Agent" class="form-control" v-model="agentExtension" />
+        </div>
+
+
+        <div class="form-group col-md-2">
+            <label for="customerNumber">Customer</label>
+            <input type="text" id="customerNumber" class="form-control" v-model="customerNumber" />
+        </div>
+
+    </div>
+
+
+    <div class="form-row">
+        <div class="form-group col-md-2">
+            <label>&nbsp;</label>
+            <button class="btn-primary form-control" @click="query">Query</button>
+        </div>
+    </div>
+
+
+
+    <div class="pagination ui basic segment grid">
+        <vuetable-pagination-info ref="paginationInfo"></vuetable-pagination-info>
+
+        <vuetable-pagination ref="pagination"
+                             @vuetable-pagination:change-page="onChangePage"></vuetable-pagination>
+    </div>
+
+    <vuetable ref="vuetable" :api-url="url" :load-on-start="false" :fields="fields" :per-page="perPage"
+              :append-params="appendParams" :transform="transformData" @vuetable:load-success="loadSuccess"
+              :query-params="{  page: 'pageIndex',perPage:'pageSize',sort:'sort'}" :reactive-api-url="false"
+              track-by="ContactID" data-path="data" pagination-path="pagination" :sort-order="sortOrder"
+              @vuetable:pagination-data="onPaginationData">
+
+        <div slot="actions" slot-scope="props">
+
+            <button @click="onActionClicked('edit',props.rowData)" title="edit" class="btn btn-primary">
+                <i class="fa-regular fa-comment-dots"></i>
+            </button>
+
+
+        </div>
+    </vuetable>
+</div>
+
+</body>
+
+
+<script th:src="@{/js/chatRecordMaster.js}"></script>
+
+
+
+</html>

@@ -1,0 +1,54 @@
+<html lang="">
+
+
+<head>
+    <title>chat</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/all.min.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css}"/>
+
+    <link rel="stylesheet" type="text/css" th:href="@{/css/chat.css}"/>
+    <script th:src="@{/js/lib/axios.min.js}"></script>
+    <script th:src="@{/js/lib/vue.min.js}"></script>
+    <script th:src="@{/js/lib/sockjs.min.js}"></script>
+    <script th:src="@{/js/lib/stomp.js}"></script>
+    <script th:src="@{/js/lib/moment-with-locales.min.js}"></script>
+
+</head>
+<body>
+
+<div class="container-fluid" id="app" style="height: 100%;">
+    <div class="row">
+
+        <div class="col-lg-12" id="chatRoom">
+
+            <div class="row" v-for="chat in chatData">
+                <div :class="[chat.caller ==caller ? 'msg_cotainer_send' : 'msg_cotainer']">
+                    <span class="msg_txt" :style= "[chat.caller ==caller ? {'color':'green'} : {'color':'red'}]">{{chat.caller}}說 <br/></span>
+                    <span class="msg_txt" >
+                        {{chat.message}}
+                        <i class="fa-regular fa-circle-play" @click="play(chat.message)" style="cursor:pointer"></i>
+                    </span>
+                    <br/><br/>
+                    <span class="msg_txt" v-if="chat.translate!=null">
+                        {{chat.translate}}
+                        <i class="fa-regular fa-circle-play"  @click="play(chat.translate)" style="cursor:pointer"></i>
+                    </span>
+                    <br/><br/>
+                    <span class="msg_time">{{chat.createTime | moment }}</span>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+
+</body>
+<script language="javaScript">
+
+</script>
+
+<script th:src="@{/js/chatlink.js}"></script>
+
+</html>

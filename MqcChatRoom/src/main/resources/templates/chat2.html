@@ -1,0 +1,109 @@
+<html lang="">
+
+
+<head>
+    <title>chat</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/all.min.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css}"/>
+
+    <link rel="stylesheet" type="text/css" th:href="@{/css/chat.css}"/>
+
+    <link rel="stylesheet" type="text/css" th:href="@{/css/fontawesome.min.css}"/>
+    <script th:src="@{/js/lib/axios.min.js}"></script>
+    <script th:src="@{/js/lib/vue.min.js}"></script>
+    <script th:src="@{/js/lib/sockjs.min.js}"></script>
+    <script th:src="@{/js/lib/stomp.js}"></script>
+    <script th:src="@{/js/lib/moment-with-locales.min.js}"></script>
+
+</head>
+<body>
+
+<div class="container-fluid" id="app" style="height: 100%;">
+    <div class="row">
+
+        <div class="col-lg-3">
+            <form v-on:submit.prevent>
+                <div class="form-group">
+                    <label for="caller">Caller</label> <input type="text"
+                                                                class="form-control" id="caller"
+                                                                aria-describedby="emailHelp"
+                                                                placeholder="caller" v-model="caller">
+                </div>
+                <div class="form-group">
+                    <label for="callee">Callee</label> <input type="text"
+                                                                  class="form-control" id="callee"
+                                                                  placeholder="callee"
+                                                                  v-model="callee">
+                </div>
+                <div class="form-group">
+                    <label for="Message">Message</label> <input type="text"
+                                                                class="form-control" id="message" placeholder="message"
+                                                                v-model="message">
+                </div>
+                <div class="form-group">
+                    <label for="lang">Translate Option</label>
+                    <select class="form-control" id="lang" v-model="to_lang">
+                        <option v-for="item in lang_data" :value="item.value">{{item.text}}</option>
+
+                    </select>
+                </div>
+
+                <hr/>
+
+                <div class="form-group">
+                    <Button class="btn btn-primary" @click="clearChatData">Clear Chat Data</Button>
+                    <Button class="btn btn-primary" @click="autoScroll">{{displayValue}}</Button>
+                </div>
+
+                <hr/>
+
+                <div class="form-group">
+                    <Button class="btn btn-primary" :disabled="IsConnect" @click="connectToWs">Connect to WebSocket</Button>
+                    <Button class="btn btn-primary" :disabled="!IsConnect" @click="disconnectToWs">Disconnect to WebSocket</Button>
+                </div>
+
+
+                <hr/>
+                <Button class="btn btn-primary" @click=sendMessage>send Message</Button>
+            </form>
+        </div>
+        <div class="col-lg-9" style="overflow: scroll; height: 100%;" id="chatRoom">
+
+            <div class="row" v-for="chat in chatData">
+                <div :class="[chat.caller ==caller ? 'msg_cotainer_send' : 'msg_cotainer']">
+                    <span class="msg_txt" :style= "[chat.caller ==caller ? {'color':'green'} : {'color':'red'}]">{{chat.caller}}說 <br/></span>
+
+
+
+                    <span class="msg_txt" >
+                        {{chat.message}}
+                        <i class="fa-regular fa-circle-play" @click="play(chat.message)" style="cursor:pointer"></i>
+                    </span>
+
+                    <br/>
+                    <br/>
+                    <span class="msg_txt">
+                        {{chat.translate}}
+                        <i class="fa-regular fa-circle-play"  @click="play(chat.translate)" style="cursor:pointer"></i>
+                    </span>
+                     <br/>
+                    <span class="msg_time">{{chat.createTime | moment }}</span>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+
+</body>
+<script th:src="@{/js/chat2.js}"></script>
+<script language="javaScript">
+    vue.caller = "1005";
+    vue.callee = "1004";
+    vue.message ="中文字翻譯"
+vue.connectToWs()
+</script>
+
+</html>

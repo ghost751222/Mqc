@@ -1,0 +1,4 @@
+.vuetable td{
+    height: 10px;
+    overflow:hidden;
+}

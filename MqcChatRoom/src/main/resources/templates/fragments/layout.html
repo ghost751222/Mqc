@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml" xmlns:layout="http://www.w3.org/1999/xhtml">
+<!--<head th:insert="fragments/head :: head"></head>-->
+
+<head>
+    <title>Home</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/sras.min.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/all.min.css}"/>
+    <script th:src="@{/js/lib/vue.min.js}"></script>
+    <script th:src="@{/js/lib/axios.min.js}"></script>
+    <script th:src="@{/js/vendor/jquery/jquery.min.js}"></script>
+    <script th:src="@{/js/vendor/bootstrap/js/bootstrap.min.js}"></script>
+    <script th:src="@{/js/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
+</head>
+<body>
+
+<body id="page-top">
+<!-- Page Wrapper -->
+<div id="wrapper">
+    <!-- Sidebar -->
+    <ul th:replace="fragments/sidebar :: sidebar"></ul>
+    <!-- End of Sidebar -->
+
+    <!--    <header th:replace="fragments/navbar :: navbar"></header>-->
+
+    <!-- Content Wrapper -->
+
+    <div id="content-wrapper" class="d-flex flex-column">
+
+        <nav th:replace="fragments/header :: header"></nav>
+
+        <!-- Begin Page Content -->
+        <div class="container-fluid h-100" style="margin:0;padding:0">
+            <iframe name="iframeMain" frameborder="0" class="w-100 h-100"></iframe>
+
+            <!--            <h1 class="h3 mb-4 text-gray-800">Blank Page</h1>-->
+            <!--            <div layout:fragment="content" ></div>-->
+        </div>
+        <!-- /.container-fluid -->
+
+
+    </div>
+    <!--    <div class="page-wrapper mdc-toolbar-fixed-adjust">-->
+    <!--        <main class="content-wrapper">-->
+    <!--            <div layout:fragment="content"></div>-->
+    <!--        </main>-->
+    <!--      -->
+    <!--    </div>-->
+    <!-- End of Content Wrapper -->
+</div>
+<!-- End of Page Wrapper -->
+
+
+<!-- Scroll to Top Button-->
+<a class="scroll-to-top rounded" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+</a>
+
+
+<!-- Reset Password  Modal-->
+<div class="modal fade" id="resetPasswordModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Ready to Reset Password</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <label for="resetPasswordInput">輸入密碼</label>
+                <input type="password" id="resetPasswordInput" v-model="resetPasswordInput"/>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                <button class="btn btn-secondary" type="button" id="resetPasswordConfirm" @click="confirmClick">
+                    Confirm
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Logout Modal-->
+<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                <a class="btn btn-primary" th:href="@{/logout}">Logout</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+<script th:src="@{/js/lib/sb-admin-2.min.js}"></script>
+<script th:inline="javascript">
+
+    const reset = new Vue({
+          el :'#resetPasswordModal',
+          data:{
+            'resetPasswordInput':null
+          },methods:{
+              confirmClick(){
+                    var csrfName = [[${_csrf.headerName}]]
+                    var csrfToken = [[${_csrf.token}]]
+
+                    axios.defaults.headers.common[csrfName] = csrfToken;
+
+                   if(this.resetPasswordInput == null){
+                        alert('Please input password')
+                        return
+                   }
+                   var url = [[@{/userInfo}]] + '/rePassword';
+                   var data = {password:this.resetPasswordInput};
+                   axios.post(url,data).then(res=>{
+                       if(res.redirected) location.reload()
+                       alert('Modify Success')
+                      $('#resetPasswordModal').modal('hide')
+                      reset.resetPasswordInput = null
+
+                   }).catch(err =>{alert('System Error'); console.log(err); } )
+              }
+          }
+
+
+    })
+
+
+
+
+</script>
+<th:block layout:fragment="script"></th:block>
+</body>
+</html>

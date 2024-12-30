@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <property name="PROJECT" value="MqcChat"/>
+    <property name="LOGS" value="${user.dir}/logs"/>
+    <property name="PATTERN" value="%black(%d{ISO8601}) %highlight(%-5level) [%blue(%t)] %yellow(%C{1.} [%line])- %msg%n%throwable"/>
+    <appender name="Console"
+              class="ch.qos.logback.core.ConsoleAppender">
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <Pattern>${PATTERN}</Pattern>
+        </layout>
+    </appender>
+
+    <appender name="RollingFile"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOGS}/${PROJECT}.log</file>
+        <encoder
+                class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <Pattern>[%date{yyyy-MM-dd HH:mm:ss}] [%-5level] [%t] [%C{1.}] [%line] - %msg%n%throwable</Pattern>
+        </encoder>
+
+
+
+        <rollingPolicy
+                class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOGS}/${PROJECT}-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <maxHistory>15</maxHistory>
+            <timeBasedFileNamingAndTriggeringPolicy
+                    class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>100MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+            <cleanHistoryOnStart>true</cleanHistoryOnStart>
+        </rollingPolicy>
+    </appender>
+
+<!--    <appender name="RollingErrorFile"-->
+<!--              class="ch.qos.logback.core.rolling.RollingFileAppender">-->
+<!--        <file>${LOGS}/${PROJECT}-ERROR.log</file>-->
+<!--        <filter class="ch.qos.logback.classic.filter.LevelFilter">-->
+<!--            <level>ERROR</level>-->
+<!--            <onMatch>ACCEPT</onMatch>-->
+<!--            <onMismatch>DENY</onMismatch>-->
+<!--        </filter>-->
+<!--        <encoder-->
+<!--                class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">-->
+<!--            <Pattern>[%date{yyyy-MM-dd HH:mm:ss}] [%-5level] [%t] [%C{1.}] [%line] - %msg%n%throwable</Pattern>-->
+<!--        </encoder>-->
+
+
+
+<!--        <rollingPolicy-->
+<!--                class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">-->
+<!--            <fileNamePattern>${LOGS}/${PROJECT}-ERROR-%d{yyyy-MM-dd}.%i.log</fileNamePattern>-->
+<!--            <maxHistory>15</maxHistory>-->
+<!--            <timeBasedFileNamingAndTriggeringPolicy-->
+<!--                    class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">-->
+<!--                <maxFileSize>100MB</maxFileSize>-->
+<!--            </timeBasedFileNamingAndTriggeringPolicy>-->
+<!--            <cleanHistoryOnStart>true</cleanHistoryOnStart>-->
+<!--        </rollingPolicy>-->
+<!--    </appender>-->
+
+
+    <root level="info">
+<!--        <appender-ref ref="RollingErrorFile"/>-->
+        <appender-ref ref="RollingFile"/>
+        <appender-ref ref="Console"/>
+    </root>
+
+</configuration>

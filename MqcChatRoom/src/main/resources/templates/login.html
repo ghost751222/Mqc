@@ -1,0 +1,111 @@
+<html>
+<head>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <link rel="icon" th:href="@{/webfonts/favicon.ico}" type="image/x-icon"/>
+    <link th:href="@{/css/login.css}" rel="stylesheet" type="text/css">
+    <script th:src="@{/js/lib/common.js}"></script>
+    <script type="text/javascript" language="javascript">
+       function createLink(link,target)
+       {
+            const a = document.createElement('a');
+             a.href = link
+             a.target = target
+             a.click();
+
+       }
+
+       function LoginSuccess(target,url)
+       {
+            var frame =  document.getElementById(target);
+              frame.src= url
+              frame.style.display="block";
+       }
+
+
+       function login(e){
+
+                var csrfName = "[[${_csrf.parameterName}]]"
+                var csrfToken = "[[${_csrf.token}]]"
+
+               axios.defaults.headers.common[csrfName] = csrfToken;
+
+                var userName = document.querySelector("#userName").value;
+                var password = document.querySelector("#password").value;
+                var data = {"username":userName,"password":password}
+                data = new URLSearchParams(data)
+
+                var  errorMessage = "帳號或密碼錯誤"
+                const config = {
+                      url : "/login",
+                      method:'post',
+                      data : data,
+                      headers : {
+                        "Content-Type": "application/x-www-form-urlencoded"
+                      }
+                }
+
+
+                axios(config).then(function (response) {
+                        console.log(response)
+                        if(response.data !=""){
+                            var urls = response.data.split(",");
+                            var hawkEyeUrl = urls[0]
+                            var firstLineUrl = urls[1]
+                            if(hawkEyeUrl == "" || firstLineUrl =="")
+                            {
+                               alert(errorMessage)
+                            }
+                            else{
+                                localStorage.setItem("username",userName)
+                                saveCookie(hawkEyeUrlKey,hawkEyeUrl)
+                                saveCookie(firstLineUrlKey,firstLineUrl)
+                                location.href ="/hawkeye/page"
+                            }
+
+                        }else{
+                            alert(errorMessage)
+                        }
+
+                     })
+                    .catch(function (error) {
+                        alert(error)
+                    });
+
+        }
+
+    </script>
+
+
+</head>
+
+<body>
+<form method="post">
+    <div class="login">
+        <h1 class="login__title">
+            MQC
+        </h1>
+        <div class="login__group">
+            <input class="login__group__input" required=type="text" id="userName" name="username" value="admin"/><label
+                class="login__group__label" th:required="required">Account</label>
+        </div>
+        <div class="login__group">
+            <input class="login__group__input" required type="password" id="password" name="password" value="admin"
+                   th:required="required"/><label
+                class="login__group__label">Password</label>
+        </div>
+
+
+        <div th:if="${param.error}" class="login__title">
+            <label for="password" class="text-info">Invalid username and password.:</label><br>
+        </div>
+
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+
+        <input class="login__sign-in" type="submit" value="登入">
+
+    </div>
+</form>
+
+</body>
+
+</html>

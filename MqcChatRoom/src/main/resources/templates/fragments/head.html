@@ -1,0 +1,122 @@
+<head th:fragment="head" xmlns:th="http://www.w3.org/1999/xhtml">
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="icon" th:href="@{/webfonts/favicon.ico}" type="image/x-icon"/>
+    <link th:href="@{/css/sb-admin-2.min.css}" rel="stylesheet" type="text/css">
+
+    <link th:href="@{/css/all.min.css}" rel="stylesheet" type="text/css">
+    <link th:href="@{/css/semantic.min.css}" rel="stylesheet" type="text/css">
+    <link th:href="@{/css/vue.dialog.css}" rel="stylesheet" type="text/css">
+    <script th:src="@{/js/lib/vue.js}"></script>
+    <script th:src="@{/js/lib/vuetable.js}"></script>
+    <script th:src="@{/js/lib/axios.min.js}"></script>
+    <script th:src="@{/js/lib/sockjs.min.js}"></script>
+    <script th:src="@{/js/lib/stomp.js}"></script>
+    <script th:src="@{/js/lib/moment-with-locales.min.js}"></script>
+    <script type="text/javascript">
+        const csrfName = "[[${_csrf.headerName}]]"
+        const csrfToken = "[[${_csrf.token}]]"
+        const contextPath = "[[@{/}]]";
+        const isAdmin = [[${session.isAdmin}]];
+        const extension = "[[${session.extension}]]";
+        const chatRecordMasterPath=  "[[@{/chatRecordMaster}]]"
+        const chatRecordDetailPath = "[[@{/chatRecordDetail}]]"
+
+        axios.defaults.headers.common[csrfName] = csrfToken;
+
+        // 異常處理
+        axios.interceptors.response.use(function (res) {
+            if(res.request.responseURL.includes('login')){
+                var newUrl =baseUrl +  "login"
+                if(window.parent){
+                  window.parent.location.href =newUrl
+                }
+                location.href = newUrl
+            }
+            return res;
+        });
+
+        Vue.use(Vuetable)
+        Vue.component('vuetable-pagination', Vuetable.VuetablePagination)
+        Vue.component("vuetable-pagination-dropdown", Vuetable.VueTablePaginationDropDown);
+        Vue.component("vuetable-pagination-info", Vuetable.VueTablePaginationInfo);
+
+        Vue.component('modal', {
+            template: '#modal-template'
+        })
+        Vue.mixin({
+          data:function(){
+             return {
+                 wsUrl:'ws',
+                 caller:extension,
+                 isAdmin:isAdmin,
+                 ws:null,
+                 IsConnect:false,
+                 contextPath:contextPath
+             }
+          },
+          methods: {
+            connectToWS:function(callback){
+
+                    var socket = new SockJS(this.wsUrl);
+                    this.ws = Stomp.over(socket);
+                    var user= {'name':this.caller};
+                    var ws= this.ws;
+                    ws.connect(user,function(frame){
+                        this.IsConnect =true;
+
+                        ws.subscribe('/topic/getResponse',function(greeting){
+
+                            if(callback) callback(JSON.parse(greeting.body))
+                        });
+
+                    },function(error) {
+                        console.error("WebScoker Connect error " + error);
+                        this.IsConnect =false;
+                    })
+
+
+
+            }
+          }
+        })
+    </script>
+
+
+
+    <script type="text/x-template" id="modal-template">
+        <transition name="modal">
+            <div class="modal-mask">
+                <div class="modal-wrapper">
+                    <div class="modal-container w-75 h-100">
+
+                        <div class="modal-header">
+                            <div  class="d-flex flex-row-reverse w-100" style="cursor:pointer">
+                                <i class="fa-solid fa-xmark" @click="$emit('close')"></i>
+                            </div>
+
+                            <slot name="header">
+
+                            </slot>
+                        </div>
+
+                        <div class="modal-body h-75">
+                            <slot name="body">
+                            </slot>
+                        </div>
+
+                        <div class="modal-footer">
+                            <slot name="footer">
+
+                            </slot>
+<!--                            <button class="modal-default-button" @click="$emit('close')">Close</button>-->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </transition>
+    </script>
+</head>
